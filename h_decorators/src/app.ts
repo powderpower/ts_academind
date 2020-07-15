@@ -1,51 +1,53 @@
-/**
- * По договоренности декораторы
- * называются с большой буквы.
- * 
- * Декораторы идут всегда вместе с классом.
- * 
- * Декортаторы выполняются как обычно, но
- * функции декоратора выполняются от нижнего к верхнему
- * 
- * Как вариант применения =>
- * Тот, кто импортирует класс,
- * также получит в обработку декоратор,
- * который выполнит определенные действия при инициализации класса.
- */
-function Logger(logString: string) {
-    console.log('LOGGER FACTORY');
-    
-    return function(constructor: Function) {
-        console.log(logString);
-        console.log(constructor);
-    }
+function PropertyLogger(target:any, proertyName: string) {
+    console.log('Property decorator!');
+    console.log(target, proertyName);
 }
 
-function WithTemplate(template: string, hookId: string) {
-    console.log('TEMPLATE FACTORY');
-    
-    return function(constructor: any) {
-        console.log('rendering template...');
-        
-        const hookEl = document.getElementById(hookId);
-        const p = new constructor();
+function AccessorLoger(target: any, name: string, descriptor: PropertyDescriptor) {
+    console.log('Accessor decorator');
+    console.log(target);
+    console.log(name);
+    console.log(descriptor);
+}
 
-        if (hookEl) {
-            hookEl.innerHTML = template;
-            /**
-             * ! - обозначает, что свойство точно будет.
-             */
-            hookEl.querySelector('h1')!.textContent = p.name;
+function MethodsLogger(target: any, name: string, descriptor: PropertyDescriptor) {
+    console.log('Method decorator');
+    console.log(target);
+    console.log(name);
+    console.log(descriptor);
+}
+
+function ArgumentDecorator(target: any, name: string, position: number) {
+    console.log('Argument decorator');
+    console.log(target);
+    console.log(name);
+    console.log(position);
+}
+
+class Product {
+    @PropertyLogger
+    private _title: string;
+    private _price: number;
+
+    @AccessorLoger
+    set price(val: number) {
+        if (val <= 0) {
+            throw new Error('Invalid price - should be positive!');
         }
+
+        this._price = val;
+    }
+
+    constructor(title: string, price: number) {
+        this._title = title;
+        this._price = price;
+    }
+
+    @MethodsLogger
+    public getPriceWithTax(@ArgumentDecorator tax: number) {
+        return this._price * (1 + tax);
     }
 }
 
-@Logger('LOGGING - PERSON')
-@WithTemplate('<h1>My Person Object</h1>', 'app')
-class Person {
-    public name = 'Max';
-
-    constructor() {
-        console.log('Creating person object...');
-    }
-}
+const firstProduct = new Product('Book', 19);
+const secondProduct = new Product('Book 2', 20);
