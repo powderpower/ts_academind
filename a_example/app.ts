@@ -14,7 +14,9 @@ userInput = 'Max';
 // userName = userInput;
 
 /**
- * never - тип данных, обозначающий, что функция не имеет возврата.
+ * never - тип данных, обозначающий,
+ * что выполнение функции не дойдет до конца и не будет иметь возврата.
+ * void, в свою очередь, обозначает что выполнение функции дойдет до конца.
  */
 function generateError(message: string, code: number): never {
     throw {message: message, errorCode: code};
