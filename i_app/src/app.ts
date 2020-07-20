@@ -8,17 +8,31 @@ interface Validatable {
     max?: number;
 }
 
-/*
 function validate(validatableInput: Validatable) {
     let isValid = true;
 
-    if (validatableInput.required typeof ) {
-        isValid = isValid && validatableInput.value.trim().length
+    if (validatableInput.required) {
+        isValid = isValid && validatableInput.value.toString().trim().length !== 0;
+    }
+
+    if (validatableInput.minLength != null && typeof validatableInput.value === 'string') {
+        isValid = isValid && validatableInput.value.length >= validatableInput.minLength;
+    }
+
+    if (validatableInput.maxLength != null && typeof validatableInput.value === 'string') {
+        isValid = isValid && validatableInput.value.length <= validatableInput.maxLength;
+    }
+
+    if (validatableInput.min != null && typeof validatableInput.value === 'number') {
+        isValid = isValid && validatableInput.value >= validatableInput.min;
+    }
+
+    if (validatableInput.max != null && typeof validatableInput.value === 'number') {
+        isValid = isValid && validatableInput.value <= validatableInput.max;
     }
 
     return isValid;
 }
-*/
 
 // Autobind Decorator
 function Autobind(
@@ -35,6 +49,40 @@ function Autobind(
     }
 
     return adjDescriptor;
+}
+
+type Stasusable = 'active' | 'finished';
+
+// ProjectList Classe
+class ProjectList {
+    private templateElement: HTMLTemplateElement;
+    private hostElement: HTMLDivElement;
+    private element: HTMLElement;
+    private type: Stasusable;
+    
+    constructor(type: Stasusable) {
+        this.type = type;
+        const
+            templateElement = document.getElementById('project-list'),
+            hostElement = document.getElementById('app');
+
+        if (! (templateElement instanceof HTMLTemplateElement)) {
+            throw new Error('Template element is not defined!');
+        }
+
+        if (! (hostElement instanceof HTMLDivElement)) {
+            throw new Error('Host element is not defined!s');
+        }
+
+        this.templateElement = templateElement as HTMLTemplateElement;
+        
+        this.hostElement = hostElement as HTMLDivElement;
+
+        const importedNode = document.importNode(this.templateElement.content, true);
+
+        this.element = importedNode.firstElementChild as HTMLFormElement;
+        this.element.id = 'user-input';
+    }
 }
 
 // ProjectInput Class
@@ -83,19 +131,38 @@ class ProjectInput
         this.hostElement.insertAdjacentElement('afterbegin', this.element);
     }
 
-    private gatherUserInput(): [string, string, number]
+    private gatherUserInput(): [string, string, number] | void
     {
         const
             enteredTitle = this.titleInputElement.value,
             enteredDescription = this.descriptionInputElement.value,
             enteredPeople = this.peopleInputElement.value;
 
-        if ( true
-            // validate({value: enteredTitle, required: true, minlengt: 5})
-            // validate({value: enteredDescription, required: true, minlengt: 5})
-            // validate({value: enteredPeople, required: true, minlengt: 5})
-        ) {
+        const titleValidatable: Validatable = {
+            value: enteredTitle,
+            required: true,
+        };
 
+        const descriptionValidatable: Validatable = {
+            value: enteredDescription,
+            required: true,
+            minLength: 5,
+        };
+
+        const peopleValidatable: Validatable = {
+            value: +enteredPeople,
+            required: true,
+            min: 1,
+            max: 5,
+        };
+
+        if (
+            ! validate(titleValidatable) ||
+            ! validate(descriptionValidatable) ||
+            ! validate(peopleValidatable)
+        ) {
+            alert('Invalid input, please try again!');
+            return;
         }
 
         return [enteredTitle, enteredDescription, +enteredPeople];
