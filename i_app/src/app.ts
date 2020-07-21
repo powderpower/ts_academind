@@ -1,3 +1,65 @@
+// Project State Management
+
+type Project = {
+    id: string,
+    title: string,
+    description: string,
+    people: number,
+};
+
+class ProjectState
+{
+    private projects: any[] = [];
+
+    private listeners: any[] = [];
+
+    private static instance: ProjectState;
+
+    private constructor()
+    {
+
+    }
+
+    static getInstance(): ProjectState
+    {
+        if (this.instance instanceof ProjectState) {
+            return this.instance;
+        }
+
+        this.instance = new ProjectState();
+
+        return this.instance;
+    }
+
+    private createProject(title: string, description: string, numberOfPeople: number): Project
+    {
+        return {
+            id: Math.random().toString(),
+            title: title,
+            description: description,
+            people: numberOfPeople,
+        }
+    }
+
+    public addListener(listener: Function): void
+    {
+        this.listeners.push(listener);
+    }
+
+    public addProject(title: string, description: string, numberOfPeople: number): void
+    {
+        const newProject = this.createProject(title, description, numberOfPeople);
+
+        this.projects.push(newProject);
+
+        for (const listerFn of this.listeners) {
+            listerFn(this.projects.slice());
+        }
+    }
+}
+
+const projectState = ProjectState.getInstance();
+
 // Validation
 interface Validatable {
     value: string | number;
@@ -59,12 +121,16 @@ class ProjectList {
     private hostElement: HTMLDivElement;
     private element: HTMLElement;
     private type: Stasusable;
+    private assignedProjects: any[];
     
-    constructor(type: Stasusable) {
+    constructor(type: Stasusable)
+    {
         this.type = type;
         const
             templateElement = document.getElementById('project-list'),
             hostElement = document.getElementById('app');
+
+        this.assignedProjects = [];
 
         if (! (templateElement instanceof HTMLTemplateElement)) {
             throw new Error('Template element is not defined!');
@@ -81,8 +147,46 @@ class ProjectList {
         const importedNode = document.importNode(this.templateElement.content, true);
 
         this.element = importedNode.firstElementChild as HTMLFormElement;
-        this.element.id = 'user-input';
+        this.element.id = `${this.type}-projects`;
+
+        console.log(this.element);
+
+        projectState.addListener((projects: any[]) => {
+            this.assignedProjects = projects;
+            this.renderProjects();
+        });
+
+        this.attach();
+        this.renderContent();
     }
+
+    private renderProjects() {
+        const listEl = document.getElementById(`${this.type}-projects-list`)! as HTMLUListElement;
+
+        console.log(listEl);
+
+        for (const prjItem of this.assignedProjects) {
+
+            const listItem = document.createElement('li');
+            listItem.textContent = prjItem.title;
+            listEl.appendChild(listItem);
+
+        }
+    }
+
+    private renderContent(): void
+    {
+        const listId = `${this.type}-projects-list`;
+        this.element.querySelector('ul')!.id = listId;
+        this.element.querySelector('h2')!.textContent = this.type.toUpperCase() + ' PROJECTS';
+    }
+
+    private attach(): void
+    {
+        this.hostElement.insertAdjacentElement('beforeend', this.element);
+    }
+
+
 }
 
 // ProjectInput Class
@@ -187,7 +291,9 @@ class ProjectInput
         }
 
         const [title, desc, people] = userInput;
-        console.log(title, desc, people);
+
+        projectState.addProject(title, desc, people);
+
         this.clearInputs();
     }
 
@@ -205,4 +311,6 @@ class ProjectInput
 }
 
 const prjInput = ProjectInput.initForm();
+const activeProjectList = new ProjectList('active');
+const finishedProjectList = new ProjectList('finished');
 
