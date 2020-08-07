@@ -401,5 +401,6 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement>
 }
 
 const prjInput              = ProjectInput.initForm();
+
 const activeProjectList     = new ProjectList('active');
 const finishedProjectList   = new ProjectList('finished'); 
