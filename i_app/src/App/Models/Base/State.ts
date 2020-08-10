@@ -1,6 +1,6 @@
 import { Listener } from './Types';
 
-export abstract class State<T>
+export default abstract class State<T>
 {
     protected listeners: Listener<T>[] = [];
     

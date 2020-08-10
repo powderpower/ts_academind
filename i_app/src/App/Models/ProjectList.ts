@@ -1,11 +1,11 @@
 import { Stasusable, ProjectStatus } from './Base/Types.js';
-import { Project } from './Project.js';
-import { ProjectState } from './ProjectState.js';
-import { ProjectItem } from './ProjectItem.js';
-import { Component } from './Base/Component.js';
-import { Autobind } from '../Decorators/Autobind.js';
+import Project from './Project.js';
+import ProjectState from './ProjectState.js';
+import ProjectItem from './ProjectItem.js';
+import Component from './Base/Component.js';
+import Autobind from '../Decorators/Autobind.js';
 
-export class ProjectList extends Component<HTMLDivElement, HTMLElement> implements DragTarget
+export default class ProjectList extends Component<HTMLDivElement, HTMLElement> implements DragTarget
 {
     private type: Stasusable;
     private assignedProjects: Project[];

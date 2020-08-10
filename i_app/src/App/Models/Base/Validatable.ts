@@ -1,4 +1,4 @@
-interface Validatable
+export default interface Validatable
 {
     value: string | number;
     required?: boolean;

@@ -1,6 +1,6 @@
-import { ProjectInput } from './App/Models/ProjectInput.js';
-import { ProjectList } from './App/Models/ProjectList.js';
-import { ProjectState } from './App/Models/ProjectState.js';
+import ProjectInput from './App/Models/ProjectInput.js';
+import ProjectList from './App/Models/ProjectList.js';
+import ProjectState from './App/Models/ProjectState.js';
 
 const projectStateContainer = ProjectState.getInstance();
 

@@ -1,6 +1,6 @@
 import { ProjectStatus } from './Base/Types.js';
 
-export class Project
+export default class Project
 {
     constructor(
         public id: string,

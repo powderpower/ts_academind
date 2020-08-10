@@ -1,8 +1,8 @@
-import { State } from './Base/State.js';
+import State from './Base/State.js';
+import Project from './Project.js';
 import { BaseProject, ProjectStatus } from './Base/Types.js';
-import { Project } from './Project.js';
 
-export class ProjectState extends State<Project>
+export default class ProjectState extends State<Project>
 {
     private projects: any[] = [];
 
