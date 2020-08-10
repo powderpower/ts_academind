@@ -1,4 +1,4 @@
-import { ProjectStatus } from './Base/Types.js';
+import { ProjectStatus } from './Base/Types';
 
 export default class Project
 {

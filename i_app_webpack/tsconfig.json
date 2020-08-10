@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src", 
     "target": "es6",
     "module": "es2015",
     "strict": true,
@@ -9,5 +8,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
+    "sourceMap": true,
   }
 }

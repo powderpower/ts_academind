@@ -1,3 +1,5 @@
+import Validatable from '../Models/Base/Validatable';
+
 export function validate(validatableInput: Validatable) {
     let isValid = true;
 

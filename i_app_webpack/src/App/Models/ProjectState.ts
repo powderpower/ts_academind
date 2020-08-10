@@ -1,6 +1,6 @@
-import State from './Base/State.js';
-import Project from './Project.js';
-import { BaseProject, ProjectStatus } from './Base/Types.js';
+import State from './Base/State';
+import Project from './Project';
+import { BaseProject, ProjectStatus } from './Base/Types';
 
 export default class ProjectState extends State<Project>
 {
