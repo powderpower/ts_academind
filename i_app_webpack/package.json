@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server",
+    "start": "lite-server",
     "build": "webpack --mode=production --progress --hide-modules"
   },
   "author": "",
@@ -17,5 +17,9 @@
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.159",
+    "lite-server": "^2.5.4"
   }
 }
